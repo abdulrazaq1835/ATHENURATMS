@@ -7,7 +7,7 @@ import Contact from './pages/Contact'
 import Help from './pages/Help'
 import PagesLayout from './components/Layout/PagesLayout'
 import Login from './components/auth/Login'
-import Register from './components/auth/Register'
+import Register from './pages/Register'
 import ProtectedRoute from './components/Layout/ProtectedRoute'
 
 const App = () => {
