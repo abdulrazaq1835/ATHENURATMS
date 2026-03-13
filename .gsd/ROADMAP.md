@@ -1,10 +1,10 @@
 # ROADMAP.md
 
-> **Current Phase**: Not started
+> **Current Phase**: 2
 > **Milestone**: v1.0
 
 ## Must-Haves (from SPEC)
-- [ ] Authentication (Email/Password) and RBAC for Admin & Manager.
+- [x] Authentication (Email/Password) and RBAC for Admin & Manager.
 - [ ] Project Creation & Manager Dashboard.
 - [ ] Bulk Intern Upload via CSV/Excel with validation.
 - [ ] Team Builder (Project -> Members + 1 Team Leader).
@@ -14,8 +14,8 @@
 ## Phases
 
 ### Phase 1: Foundation Setup & Config (Auth + DB)
-**Status**: ⬜ Not Started
-**Objective**: Scaffold the frontend (Vite/React/TS/Tailwind) and backend (Express/TS/MongoDB). Establish routing, error handling, authentication middleware, and RBAC logins for Admin/Manager.
+**Status**: ✅ Complete
+**Objective**: Scaffold the frontend and backend. Establish routing, error handling, authentication middleware, and RBAC logins for Admin/Manager.
 
 ### Phase 2: Core Management (Projects & Interns Upload)
 **Status**: ⬜ Not Started
