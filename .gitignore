@@ -82,12 +82,12 @@ docs/
 scripts/
 
 # ================================================================
-#  GSD DOCUMENTATION (optional — comment out if you WANT it pushed)
+#  GSD & INTERNAL TOOLING
 # ================================================================
-# .gsd/
-.gsd/examples/
-.gsd/templates/
-.gsd/phases/*/RESEARCH.md
+.gsd/
+.qoder/
+backend/.qoder/
+frontend/.qoder/
 
 # ================================================================
 #  COVERAGE & TESTING ARTIFACTS
