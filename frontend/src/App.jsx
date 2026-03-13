@@ -6,12 +6,13 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Help from './pages/Help'
 import PagesLayout from './components/Layout/PagesLayout'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+import ProtectedRoute from './components/Layout/ProtectedRoute'
 
 const App = () => {
   return (
-    <Routes>  {/* Just Routes, no BrowserRouter */}
+    <Routes>
       <Route element={<PagesLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -20,6 +21,15 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
+
+      {/* Protected Dashboards */}
+      <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']} />}>
+        {/* Placeholder dashboards, replace with actual dashboard components later */}
+        <Route path="/dashboard" element={<div>Dashboard Placeholder</div>} />
+      </Route>
+
+      {/* 404 Catcher */}
+      <Route path="*" element={<div className="min-h-screen flex items-center justify-center text-3xl font-bold">404 - Page Not Found</div>} />
     </Routes>
   )
 }
