@@ -2,6 +2,11 @@ import { model, Schema } from "mongoose"
 
 const projectSchema = new Schema(
   {
+      workspaceId : {
+        type : Schema.Types.ObjectId,
+        ref : "Workspace",
+        required : true
+      },
       projectName : {
         type : String,
         required : true
@@ -22,6 +27,20 @@ const projectSchema = new Schema(
         ref : "User",
         required : true
       },
+      members: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+          },
+          role: {
+            type: String,
+            enum: ["TEAM_LEAD", "TEAM_MEMBER"],
+            required: true
+          }
+        }
+      ],
       status : {
         type : String,
         default : "pending"

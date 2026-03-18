@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 import { addNewMember, createTeam, getTeams, removeTeamLeaderAndAddToTeam, removeTeamMember, setNewTeamLeader, updateTeam } from "../controllers/team.controller.js";
-import verifyJWT from "../middlewares/auth.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 
 const router = Router()

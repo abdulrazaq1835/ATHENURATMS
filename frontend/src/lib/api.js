@@ -6,7 +6,9 @@ export const api = axios.create({ baseURL: API_BASE });
 
 api.interceptors.request.use((cfg) => {
   const token = localStorage.getItem('token');
+  const workspaceId = localStorage.getItem('activeWorkspaceId');
   if (token) cfg.headers.Authorization = `Bearer ${token}`;
+  if (workspaceId) cfg.headers['x-workspace-id'] = workspaceId;
   return cfg;
 });
 

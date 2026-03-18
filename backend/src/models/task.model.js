@@ -7,13 +7,9 @@ const taskSchema = new Schema(
       type : Schema.Types.ObjectId,
       ref : "Project"
     },
-    teamId : {
-      type : Schema.Types.ObjectId,
-      ref : "Team"
-    },
     memberId : {
         type : Schema.Types.ObjectId,
-        ref : "Intern"
+        ref : "User"
     },
     date : {
       type : Date,
@@ -32,7 +28,7 @@ const taskSchema = new Schema(
     },
     submittedBy : {
       type : Schema.Types.ObjectId,
-      ref : "Intern"
+      ref : "User"
     }
   }, { timestamps : true }
 )

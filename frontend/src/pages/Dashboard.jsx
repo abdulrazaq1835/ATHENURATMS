@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import { FiFolder, FiLogOut, FiCheckCircle, FiAlertCircle, FiX, FiUsers, FiUploadCloud } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,22 +31,37 @@ const Toast = ({ msg, type, onClose }) => (
   </motion.div>
 );
 
-const TABS = [
-  { id: 'projects', label: 'Projects', icon: FiFolder },
-  { id: 'interns', label: 'Interns', icon: FiUploadCloud },
-  { id: 'teams', label: 'Teams', icon: FiUsers },
-];
+// TABS definition moved inside component for dynamic rendering based on role
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('projects');
   const [toast, setToast] = useState(null);
+  const [workspace, setWorkspace] = useState(null);
+
+  useEffect(() => {
+    const wsId = localStorage.getItem('activeWorkspaceId');
+    if (!wsId) return navigate('/workspaces');
+    
+    api.get(`/api/v1/tms/workspace/${wsId}`)
+      .then(res => setWorkspace(res.data.data))
+      .catch(() => navigate('/workspaces'));
+  }, [navigate]);
+
+  const workspaceRole = workspace?.members?.find(m => m.user?._id === user?._id || m.user === user?._id)?.role;
+  const isWorkspaceAdmin = user?.isSuperuser || workspaceRole === 'ADMIN' || workspaceRole === 'MANAGER';
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3500);
   };
+
+  const tabs = [
+    { id: 'projects', label: 'Projects', icon: FiFolder },
+    { id: 'members', label: 'Members', icon: FiUsers },
+    ...(isWorkspaceAdmin ? [{ id: 'invites', label: 'Invites', icon: FiUploadCloud }] : [])
+  ];
 
   const handleLogout = () => {
     logout();
@@ -68,7 +84,18 @@ const Dashboard = () => {
             <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
               <FiFolder size={16} className="text-white" />
             </div>
-            <span className="font-bold text-slate-800 tracking-tight">TMS Dashboard</span>
+            <div>
+              <span className="font-bold text-slate-800 tracking-tight block">TMS Dashboard</span>
+              <span className="text-[10px] text-blue-600 font-bold uppercase tracking-wider -mt-1 block">
+                {workspace?.name || 'Loading Workspace...'}
+              </span>
+            </div>
+            <button 
+              onClick={() => navigate('/workspaces')}
+              className="ml-4 text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-500 px-3 py-1 rounded-full transition-all"
+            >
+               Switch
+            </button>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-full px-4 py-1.5">
@@ -95,7 +122,7 @@ const Dashboard = () => {
           {/* Sidebar Tabs */}
           <aside className="md:w-64 shrink-0">
             <div className="sticky top-28 bg-white border border-slate-200 rounded-2xl p-3 flex flex-col gap-1 shadow-sm">
-              {TABS.map(tab => {
+              {tabs.map(tab => {
                 const isAct = activeTab === tab.id;
                 const Icon = tab.icon;
                 return (
@@ -122,12 +149,12 @@ const Dashboard = () => {
                     1. Create Project
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${activeTab === 'interns' ? 'bg-blue-500' : 'bg-slate-300'}`}/>
-                    2. Upload Interns
+                    <div className={`w-1.5 h-1.5 rounded-full ${activeTab === 'members' ? 'bg-blue-500' : 'bg-slate-300'}`}/>
+                    2. Members
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${activeTab === 'teams' ? 'bg-blue-500' : 'bg-slate-300'}`}/>
-                    3. Build Teams
+                    <div className={`w-1.5 h-1.5 rounded-full ${activeTab === 'invites' ? 'bg-blue-500' : 'bg-slate-300'}`}/>
+                    3. Invites
                   </li>
                 </ul>
               </div>
@@ -142,9 +169,9 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {activeTab === 'projects' && <ProjectsTab user={user} showToast={showToast} />}
-              {activeTab === 'interns' && <InternsTab showToast={showToast} />}
-              {activeTab === 'teams' && <TeamsTab showToast={showToast} />}
+              {activeTab === 'projects' && <ProjectsTab user={user} workspaceRole={workspaceRole} showToast={showToast} />}
+              {activeTab === 'members' && <InternsTab workspaceRole={workspaceRole} showToast={showToast} />}
+              {activeTab === 'invites' && <TeamsTab user={user} workspaceRole={workspaceRole} showToast={showToast} />}
             </motion.div>
           </section>
 

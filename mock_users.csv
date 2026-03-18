@@ -1,0 +1,9 @@
+name,email,phone,domain,joiningDate,internId
+Alice Smith,alice@example.com,1234567890,Frontend,2024-01-15,INT001
+Bob Jones,bob@example.com,0987654321,Backend,2024-02-01,INT002
+Charlie Brown,charlie@example.com,5554443333,UI/UX,2024-01-20,INT003
+David Miller,david@test.com,9998887777,DevOps,2024-03-10,INT004
+Eva Green,eva@corporate.org,1112223333,Mobile App,2024-02-15,INT005
+Frank Castle,punisher@marvel.com,0000000000,Security,2024-01-01,INT006
+Grace Hopper,grace@tech.edu,8887776666,Data Science,2024-04-01,INT007
+Henry Cavill,henry@cinema.com,7776665555,Marketing,2024-03-01,INT008

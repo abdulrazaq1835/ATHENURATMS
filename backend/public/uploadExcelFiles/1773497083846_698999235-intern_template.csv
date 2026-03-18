@@ -1,0 +1,4 @@
+intern_id,name,email,joinDate,domain,role
+INT001,John Doe,john.doe@example.com,2024-01-15,Frontend,intern
+INT002,Jane Smith,jane.smith@example.com,2024-01-15,Backend,intern
+INT003,Mike Johnson,mike.j@example.com,2024-02-01,Design,intern

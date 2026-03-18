@@ -1,0 +1,51 @@
+intern_id,name,email,joinDate,domain,role
+INT001,Aarav Patel,aarav.patel@gmail.com,01-05-2024,Frontend,intern
+INT002,Sophia Smith,sophia.smith@gmail.com,01-05-2024,Backend,intern
+INT003,Liam Johnson,liam.johnson@gmail.com,01-05-2024,Data Science,intern
+INT004,Olivia Williams,olivia.williams@gmail.com,01-05-2024,Design,intern
+INT005,Noah Brown,noah.brown@gmail.com,15-05-2024,DevOps,intern
+INT006,Emma Jones,emma.jones@gmail.com,15-05-2024,QA,intern
+INT007,Oliver Garcia,oliver.garcia@gmail.com,15-05-2024,Security,intern
+INT008,Ava Martinez,ava.martinez@gmail.com,15-05-2024,Product Management,intern
+INT009,Elijah Rodriguez,elijah.rodriguez@gmail.com,20-05-2024,Marketing,intern
+INT010,Isabella Hernandez,isabella.h@gmail.com,20-05-2024,HR,intern
+INT011,James Lopez,james.lopez@gmail.com,20-05-2024,Finance,intern
+INT012,Mia Gonzalez,mia.gonzalez@gmail.com,01-06-2024,Operations,intern
+INT013,William Wilson,william.wilson@gmail.com,01-06-2024,AI/ML,intern
+INT014,Charlotte Anderson,charlotte.a@gmail.com,01-06-2024,Cloud Computing,intern
+INT015,Benjamin Thomas,benjamin.t@gmail.com,01-06-2024,Mobile App,intern
+INT016,Amelia Taylor,amelia.taylor@gmail.com,05-06-2024,Frontend,intern
+INT017,Lucas Moore,lucas.moore@gmail.com,05-06-2024,Backend,intern
+INT018,Harper Jackson,harper.jackson@gmail.com,05-06-2024,Data Analytics,intern
+INT019,Mason Martin,mason.martin@gmail.com,10-06-2024,Design,intern
+INT020,Evelyn Lee,evelyn.lee@gmail.com,10-06-2024,DevOps,intern
+INT021,Logan Perez,logan.perez@gmail.com,10-06-2024,QA,intern
+INT022,Abigail Thompson,abigail.t@gmail.com,15-06-2024,Security,intern
+INT023,Alexander White,alexander.w@gmail.com,15-06-2024,Product Management,intern
+INT024,Emily Harris,emily.harris@gmail.com,15-06-2024,Marketing,intern
+INT025,Ethan Sanchez,ethan.sanchez@gmail.com,20-06-2024,HR,intern
+INT026,Elizabeth Clark,elizabeth.c@gmail.com,20-06-2024,Finance,intern
+INT027,Jacob Ramirez,jacob.ramirez@gmail.com,20-06-2024,Operations,intern
+INT028,Sofia Lewis,sofia.lewis@gmail.com,01-07-2024,AI/ML,intern
+INT029,Michael Robinson,michael.r@gmail.com,01-07-2024,Cloud Computing,intern
+INT030,Avery Walker,avery.walker@gmail.com,01-07-2024,Mobile App,intern
+INT031,Daniel Young,daniel.young@gmail.com,01-07-2024,Frontend,intern
+INT032,Ella Allen,ella.allen@gmail.com,05-07-2024,Backend,intern
+INT033,Henry King,henry.king@gmail.com,05-07-2024,Data Science,intern
+INT034,Chloe Wright,chloe.wright@gmail.com,05-07-2024,Design,intern
+INT035,Jackson Scott,jackson.scott@gmail.com,10-07-2024,DevOps,intern
+INT036,Victoria Torres,victoria.t@gmail.com,10-07-2024,QA,intern
+INT037,Sebastian Nguyen,sebastian.n@gmail.com,10-07-2024,Security,intern
+INT038,Grace Hill,grace.hill@gmail.com,15-07-2024,Product Management,intern
+INT039,Aiden Flores,aiden.flores@gmail.com,15-07-2024,Marketing,intern
+INT040,Zoey Green,zoey.green@gmail.com,15-07-2024,HR,intern
+INT041,Matthew Adams,matthew.adams@gmail.com,20-07-2024,Finance,intern
+INT042,Penelope Nelson,penelope.n@gmail.com,20-07-2024,Operations,intern
+INT043,Samuel Baker,samuel.baker@gmail.com,20-07-2024,AI/ML,intern
+INT044,Layla Hall,layla.hall@gmail.com,01-08-2024,Cloud Computing,intern
+INT045,David Rivera,david.rivera@gmail.com,01-08-2024,Mobile App,intern
+INT046,Riley Campbell,riley.c@gmail.com,01-08-2024,Frontend,intern
+INT047,Joseph Mitchell,joseph.m@gmail.com,01-08-2024,Backend,intern
+INT048,Nora Carter,nora.carter@gmail.com,05-08-2024,Data Analytics,intern
+INT049,Carter Roberts,carter.r@gmail.com,05-08-2024,Design,intern
+INT050,Lily Gomez,lily.gomez@gmail.com,05-08-2024,DevOps,intern

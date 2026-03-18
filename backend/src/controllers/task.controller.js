@@ -3,56 +3,55 @@ import ApiResponse from '../utils/ApiResponse.js';
 import Task from '../models/task.model.js';
 import ApiError from '../utils/ApiError.js';
 import Project from '../models/project.model.js';
-import Intern from '../models/intern.model.js';
-import Team from '../models/team.model.js';
+import User from '../models/user.model.js';
 
 
 const createNewTask = asyncHandler(async(req,res)=>{
 
-    const { projectId, teamId, memberId, date, description, status, remark } = req.body
+    const { projectId, memberId, date, description, status, remark } = req.body
 
+    const user = req.user;
 
-    if([projectId, teamId, memberId, date, description, status, remark].some((field)=>  String(field).trim() === "")) {
-      throw new ApiError(400, "All fields required")
+    if([projectId, memberId, date, description, status].some((field)=>  String(field).trim() === "")) {
+      throw new ApiError(400, "Required fields are missing")
     }
 
-        const project = await Project.findById(projectId).select("_id")
-        const intern = await Intern.findById(memberId).select("_id")
-        const team = await Team.findById(teamId).select("_id")
+    const project = await Project.findById(projectId)
+    if (!project) throw new ApiError(404, "Project not found")
 
+    const member = await User.findById(memberId)
+    if (!member) throw new ApiError(404, "User not found")
 
-     await Task.create({
-          teamId: team._id,
-          projectId : project._id,
-          memberId : intern._id,
-          date,
-          remark,
-          status,
-          description
-     })
+    await Task.create({
+        projectId: project._id,
+        memberId: member._id,
+        date: new Date(date),
+        remark: remark || "",
+        status,
+        description,
+        submittedBy: user._id
+    })
 
     return res.status(200).json(new ApiResponse(200, {}, "Create New Task Successfully"))
 })
 
+
 const getAllTask = asyncHandler(async(req,res)=>{
+    const { projectId } = req.query;
 
-        const allTask = await Task.find()
-          .populate("projectId", "projectName description startDate deadline")
-          .populate("memberId", "name email role domain")
-          .populate({
-            path: "teamId",
-            select: "name email role",
-            populate: {
-              path: "team",
-              select: "name email role domain"
-            }
-          })
-          .lean();
+    let query = {};
+    if (projectId) {
+        query.projectId = projectId;
+    }
 
-  return res.status(200).json(new ApiResponse(200 ,   allTask, "fetch all task Successfully"))
+    const allTask = await Task.find(query)
+        .populate("projectId", "projectName description startDate deadline")
+        .populate("memberId", "name email phone role")
+        .populate("submittedBy", "name email")
+        .lean();
+
+    return res.status(200).json(new ApiResponse(200 , allTask, "fetch all task Successfully"))
 })
-
-
 
 export {
   createNewTask,

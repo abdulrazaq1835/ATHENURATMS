@@ -10,6 +10,9 @@ import Login from './components/auth/Login'
 import Register from './pages/Register'
 import ProtectedRoute from './components/Layout/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
+import WorkspaceSelect from './pages/WorkspaceSelect'
+import AcceptInvite from './pages/AcceptInvite'
+import GlobalPool from './pages/GlobalPool'
 
 const App = () => {
   return (
@@ -24,10 +27,13 @@ const App = () => {
       {/* Auth Pages (Full Screen) */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/accept-invite" element={<AcceptInvite />} />
 
-      {/* Protected Dashboards */}
-      <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']} />}>
+      {/* Protected Dashboards & Workspaces */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/workspaces" element={<WorkspaceSelect />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/global-pool" element={<GlobalPool />} />
       </Route>
 
       {/* 404 Catcher */}

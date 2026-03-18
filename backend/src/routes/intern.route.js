@@ -2,7 +2,7 @@ import { Router } from "express";
 import { uploadFile } from "../middlewares/multer.middleware.js";
 import { addBulkIntern, addSingleIntern, availableIntern, getAllInterns, internLogin, internLogout } from "../controllers/intern.controller.js";
 import verifyJWTIntern from "../middlewares/intern.middleware.js";
-import verifyJWT from '../middlewares/auth.middleware.js';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 
 const router = Router()

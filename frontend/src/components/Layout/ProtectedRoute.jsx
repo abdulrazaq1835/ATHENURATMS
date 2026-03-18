@@ -9,12 +9,8 @@ const ProtectedRoute = ({ allowedRoles }) => {
         return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
 
-    // Role checking
+    // Data segregation is now handled by workspaces dynamically instead of global roles
     if (isAuthenticated) {
-        if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-            // Role not authorized, maybe redirect to a generic dashboard or unauthorized page
-            return <Navigate to="/login" replace />;
-        }
         return <Outlet />;
     }
 

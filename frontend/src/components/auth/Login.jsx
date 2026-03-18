@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import { api } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -25,14 +25,25 @@ const Login = () => {
     setIsSubmitting(true);
     setErrorMsg('');
     try {
-      const res = await axios.post('/api/v1/tms/auth/user/login', formData);
-      const userData = res.data.data;
-      // Token lives in httpOnly cookie on the backend; store user info in context
-      login(userData?.accessToken || 'cookie-auth', userData);
+      const res = await api.post('/api/v1/tms/auth/user/login', formData);
+      const { accessToken, user } = res.data.data;
+      
+      // Store in context (which stores in localStorage 'token')
+      login(accessToken, user);
+      
+      // Also set active user explicitly just in case components read it directly
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('user');
+      }
+
       setIsSuccess(true);
       setTimeout(() => {
-        navigate('/dashboard');
-      }, 1200);
+        setIsSubmitting(false);
+        navigate('/workspaces'); 
+      }, 1500);
+
     } catch (err) {
       setIsSubmitting(false);
       setErrorMsg(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -79,7 +90,7 @@ const Login = () => {
               <p className="text-blue-200 text-lg max-w-xs">Your tasks are waiting. Log in to stay on top of your goals.</p>
             </motion.div>
             <motion.div variants={itemVariants} className="mt-12 space-y-4">
-              {['Secure JWT Authentication', 'Role-based Access Control', 'Real-time Updates'].map(f => (
+              {['Secure JWT Authentication', 'Multi-Tenant Workspaces', 'Real-time Updates'].map(f => (
                 <div key={f} className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-blue-300" />
                   <span className="text-blue-100 text-sm">{f}</span>
@@ -110,7 +121,7 @@ const Login = () => {
                 <FaCheckCircle />
               </motion.div>
               <h2 className="text-3xl font-black text-gray-900">Welcome back!</h2>
-              <p className="text-gray-500 mt-2">Redirecting to your dashboard…</p>
+              <p className="text-gray-500 mt-2">Entering your workspace environment…</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -166,8 +177,8 @@ const Login = () => {
             {/* Submit */}
             <motion.button
               variants={itemVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              disabled={isSubmitting} type="submit"
-              className={`w-full py-4 text-sm font-black rounded-2xl text-white transition-all shadow-lg shadow-blue-200 ${isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+              disabled={isSubmitting || isSuccess} type="submit"
+              className={`w-full py-4 text-sm font-black rounded-2xl text-white transition-all shadow-lg shadow-blue-200 ${isSubmitting || isSuccess ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">

@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft, FaPhone, FaKey } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import { api } from '../lib/api';
 
 const Register = () => {
-  const [role, setRole] = useState('manager');
   const [showPassword, setShowPassword] = useState(false);
-  const [showSecretKey, setShowSecretKey] = useState(false);
+  const [showSuperSecretKey, setShowSuperSecretKey] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -18,7 +17,7 @@ const Register = () => {
     email: '',
     phone: '',
     password: '',
-    secretKey: '',
+    superSecretKey: '',
   });
 
   const handleChange = (e) => {
@@ -31,12 +30,12 @@ const Register = () => {
     setIsSubmitting(true);
     setErrorMsg('');
     try {
-      await axios.post('/api/v1/tms/auth/user/register', {
+      await api.post('/api/v1/tms/auth/user/register', {
         name: formData.fullName,
         email: formData.email,
         phone: formData.phone,
         password: formData.password,
-        secretKey: formData.secretKey,
+        superSecretKey: formData.superSecretKey,
       });
       setIsSuccess(true);
       setTimeout(() => navigate('/login'), 1500);
@@ -55,11 +54,6 @@ const Register = () => {
     visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 120 } },
   };
 
-  const panelColors = {
-    manager: 'from-blue-700 via-blue-600 to-indigo-800',
-    admin: 'from-violet-700 via-purple-600 to-indigo-900',
-  };
-
   return (
     <motion.div
       initial="hidden" animate="visible" variants={containerVariants}
@@ -71,7 +65,7 @@ const Register = () => {
         className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
       >
         <motion.div
-          animate={{ background: `linear-gradient(to bottom right, ${role === 'admin' ? '#6d28d9, #7c3aed, #312e81' : '#1d4ed8, #2563eb, #312e81'})` }}
+          animate={{ background: `linear-gradient(to bottom right, #6d28d9, #7c3aed, #312e81)` }}
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         />
@@ -92,9 +86,9 @@ const Register = () => {
             </motion.div>
             <motion.div variants={itemVariants} className="mt-10 p-5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
               <p className="text-xs text-blue-200 mb-1 uppercase tracking-widest font-bold">Currently Registering As</p>
-              <p className="text-2xl font-black capitalize">{role}</p>
+              <p className="text-2xl font-black capitalize">Superuser</p>
               <p className="text-blue-300 text-sm mt-1">
-                {role === 'manager' ? 'Can create projects, upload interns & manage teams.' : 'Super user — full system visibility and control.'}
+                Superuser — Full system visibility, workspace creation, and management control.
               </p>
             </motion.div>
           </div>
@@ -136,17 +130,7 @@ const Register = () => {
             )}
           </motion.div>
 
-          {/* Role Toggle */}
-          <motion.div variants={itemVariants} className="flex gap-3 mb-6 p-1 bg-gray-200 rounded-2xl">
-            {['manager', 'admin'].map(r => (
-              <button
-                key={r} type="button" onClick={() => setRole(r)}
-                className={`flex-1 py-3 rounded-xl text-sm font-bold capitalize transition-all duration-300 ${role === r ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                {r}
-              </button>
-            ))}
-          </motion.div>
+          {/* Role Toggle Removed (Only Superusers use this form) */}
 
           <form className="space-y-3" onSubmit={handleSubmit}>
             {/* Full Name */}
@@ -188,20 +172,20 @@ const Register = () => {
               </button>
             </motion.div>
 
-            {/* Secret Key */}
+            {/* Super Secret Key */}
             <motion.div variants={itemVariants} className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-500">
                 <FaKey size={13} />
               </div>
-              <input name="secretKey" type={showSecretKey ? 'text' : 'password'} required onChange={handleChange}
-                placeholder={role === 'admin' ? 'Admin Secret Key' : 'Manager Secret Key'}
+              <input name="superSecretKey" type={showSuperSecretKey ? 'text' : 'password'} required onChange={handleChange}
+                placeholder="Super Secret Key"
                 className="block w-full pl-11 pr-12 py-4 border-2 border-blue-200 bg-blue-50 rounded-2xl text-gray-900 focus:outline-none focus:border-blue-600 transition-all placeholder-gray-400 text-sm" />
-              <button type="button" onClick={() => setShowSecretKey(!showSecretKey)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-600 transition-colors">
-                {showSecretKey ? <FaEyeSlash size={15} /> : <FaEye size={15} />}
+              <button type="button" onClick={() => setShowSuperSecretKey(!showSuperSecretKey)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-600 transition-colors">
+                {showSuperSecretKey ? <FaEyeSlash size={15} /> : <FaEye size={15} />}
               </button>
             </motion.div>
             <motion.p variants={itemVariants} className="text-xs text-gray-400 pl-1">
-              {role === 'admin' ? '🔐 Enter the Admin secret key provided by your system administrator.' : '🔑 Enter the Manager secret key to register as a manager.'}
+               🔐 Enter the Super Secret Key provided by your system administrator to construct a master workspace god-mode account.
             </motion.p>
 
             {/* Submit */}

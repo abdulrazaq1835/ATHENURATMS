@@ -1,19 +1,14 @@
 import { Router } from "express";
-import { createProject, getAllProject, updateDeadline, updateProject } from "../controllers/project.controller.js";
-import verifyJWT from "../middlewares/auth.middleware.js";
-
+import { createProject, getAllProjectsByWorkspace, updateDeadline, updateProject } from "../controllers/project.controller.js";
+import { verifyJWT, verifyWorkspaceMember, verifyWorkspaceAdmin } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
 router.use(verifyJWT)
 
-router.route("/add/project").post(createProject)
-
-router.route("/update/deadline/:projectId").post(updateDeadline)
-
-router.route("/update/:projectId").patch(updateProject)
-
-router.route("/get/project").get(getAllProject)
-
+router.route("/add/project").post(verifyWorkspaceAdmin, createProject)
+router.route("/workspace/:workspaceId").get(verifyWorkspaceMember, getAllProjectsByWorkspace)
+router.route("/update/deadline/:projectId").post(verifyWorkspaceAdmin, updateDeadline)
+router.route("/update/:projectId").patch(verifyWorkspaceAdmin, updateProject)
 
 export default router;

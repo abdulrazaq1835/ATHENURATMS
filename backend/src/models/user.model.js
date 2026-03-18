@@ -30,9 +30,24 @@ const userSchema = new Schema(
       refreshToken : {
         type : String
       },
-      role : {
-          type : String,
-          required : true
+      isSuperuser: {
+        type: Boolean,
+        default: false
+      },
+      defaultPasswordChanged: {
+        type: Boolean,
+        default: false
+      },
+      domain: {
+        type: String,
+        default: ""
+      },
+      joiningDate: {
+        type: Date
+      },
+      internId: {
+        type: String,
+        default: ""
       }
   },
   { timestamps : true }
@@ -56,7 +71,7 @@ userSchema.methods.generateAccessToken = function () {
       _id : this._id,
       name : this.name,
       email : this.email,
-      role : this.role
+      isSuperuser : this.isSuperuser
   };
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn : process.env.ACCESS_TOKEN_EXPIRY || "15m"

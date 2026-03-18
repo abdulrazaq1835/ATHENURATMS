@@ -2,9 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -12,24 +10,26 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (token) {
+        if (token && token !== 'undefined' && token !== 'null') {
             try {
-                // Decode token for user payload manually or simply relying on the token existing for MVP
-                // For a robust implementation we would parse JWT like JSON.parse(atob(token.split('.')[1]))
-                const base64Url = token.split('.')[1];
-                if (base64Url) {
+                const parts = token.split('.');
+                if (parts.length === 3) {
+                    const base64Url = parts[1];
                     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
                     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                     }).join(''));
 
-                    setUser(JSON.parse(jsonPayload));
+                    const parsedUser = JSON.parse(jsonPayload);
+                    setUser(parsedUser);
+                } else {
+                    console.warn('AuthContext: Token is not a 3-part JWT');
                 }
             } catch (err) {
-                console.error("Invalid token", err);
+                console.error("AuthContext: Invalid token format", err);
                 setUser(null);
-                setToken(null);
-                localStorage.removeItem('token');
+                // Don't wipe token immediately in case it's a transient error, 
+                // but for security normally we would: localStorage.removeItem('token');
             }
         } else {
             setUser(null);
@@ -38,15 +38,17 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const login = (newToken, userData) => {
+        localStorage.setItem('token', newToken);
         setToken(newToken);
         setUser(userData);
-        localStorage.setItem('token', newToken);
     };
 
     const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('activeWorkspaceId');
+        localStorage.removeItem('user');
         setToken(null);
         setUser(null);
-        localStorage.removeItem('token');
     };
 
     const value = {
@@ -60,7 +62,12 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {loading ? (
+                <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+                    <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p className="text-gray-500 font-medium animate-pulse">Initializing Secure Session...</p>
+                </div>
+            ) : children}
         </AuthContext.Provider>
     );
 };

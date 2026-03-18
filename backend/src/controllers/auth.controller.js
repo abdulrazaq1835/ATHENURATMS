@@ -29,24 +29,19 @@ import asyncHandler from '../utils/asyncHandler.js'
 }
 
 
-//  Signup User
+//  Signup User (Superuser Only)
 const registerUser = asyncHandler(async(req,res)=>{
 
-    const { name, email, password, phone, secretKey } = req.body;
+    const { name, email, password, phone, superSecretKey } = req.body;
 
     // Validate required fields
-    if([name, email, password, phone].some((item) => !item || item.trim() === "")) {
+    if([name, email, password, phone, superSecretKey].some((item) => !item || item.trim() === "")) {
       throw new ApiError(400, "All fields are required")
     }
 
-    // Determine role from secret key
-    let role;
-    if (secretKey === process.env.MANAGER_SECRET_KEY) {
-      role = "manager";
-    } else if (secretKey === process.env.ADMIN_SECRET_KEY) {
-      role = "admin";
-    } else {
-      throw new ApiError(403, "Invalid secret key. You are not authorized to create an account.")
+    // Verify Super Secret Key
+    if (superSecretKey !== process.env.SUPER_SECRET_KEY) {
+      throw new ApiError(403, "Invalid super secret key. You are not authorized to create a superuser account.")
     }
 
     const emailAlreadyExist = await User.findOne({ email })
@@ -58,11 +53,11 @@ const registerUser = asyncHandler(async(req,res)=>{
           name,
           email,
           password,
-          role,
-          phone
+          phone,
+          isSuperuser: true
     })
 
-  return res.status(200).json(new ApiResponse(200, {}, `${register.role} registered successfully`))
+  return res.status(200).json(new ApiResponse(200, {}, "Superuser registered successfully"))
 })
 
 
@@ -70,11 +65,10 @@ const registerUser = asyncHandler(async(req,res)=>{
 //  SingIn User
 const userLoggedIn = asyncHandler(async(req,res)=>{
 
-      const {name, email, password } = req.body
+      const { email, password } = req.body
 
-
-      if([email,password].some(item => item.trim() === "")) {
-        throw new ApiError(400, "both fields required")
+      if(!email || !password || email.trim() === "" || password.trim() === "") {
+        throw new ApiError(400, "Email and password are required")
       }
 
      const user = await User.findOne({ email });
