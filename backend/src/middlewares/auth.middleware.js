@@ -10,7 +10,6 @@ const verifyJWT = asyncHandler(async(req,_,next)=>{
       try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
-
         if(!token) {
           throw new ApiError(401, "unAuthorized request")
         }
@@ -25,7 +24,7 @@ const verifyJWT = asyncHandler(async(req,_,next)=>{
 
 
       req.user = user
-        next()
+      next()
 
       } catch (error) {
           throw new ApiError(401,  error.message ||"token is used or expired")
@@ -42,7 +41,11 @@ const verifySuperuser = asyncHandler(async(req, res, next) => {
 
 // Verifies if the user is at least a member of the workspace
 const verifyWorkspaceMember = asyncHandler(async(req, res, next) => {
-    const workspaceId = req.header("x-workspace-id");
+
+  console.log("req.body",req.body)
+
+    const workspaceId = req.header("x-workspace-id") || req.body?.workspaceId || req.params
+
     if(!workspaceId) {
         throw new ApiError(400, "Workspace ID is required in headers.");
     }
@@ -50,9 +53,11 @@ const verifyWorkspaceMember = asyncHandler(async(req, res, next) => {
     if(req.user.isSuperuser) return next();
 
     const workspace = await Workspace.findById(workspaceId);
+
     if(!workspace) throw new ApiError(404, "Workspace not found.");
 
     const member = workspace.members.find(m => m.user.toString() === req.user._id.toString());
+
     if(!member) throw new ApiError(403, "You are not a member of this workspace.");
 
     req.workspace = workspace;
@@ -61,7 +66,10 @@ const verifyWorkspaceMember = asyncHandler(async(req, res, next) => {
 
 // Verifies if the user is a MANAGER or ADMIN in the workspace
 const verifyWorkspaceAdmin = asyncHandler(async(req, res, next) => {
-    const workspaceId = req.header("x-workspace-id");
+
+      console.log("req.body",req.body)
+
+    const workspaceId = req.header("x-workspace-id") || req.body.workspaceId
     if(!workspaceId) {
         throw new ApiError(400, "Workspace ID is required in headers.");
     }
@@ -79,5 +87,6 @@ const verifyWorkspaceAdmin = asyncHandler(async(req, res, next) => {
     req.workspace = workspace;
     next();
 });
+
 
 export { verifyJWT, verifySuperuser, verifyWorkspaceMember, verifyWorkspaceAdmin };

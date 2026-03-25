@@ -6,6 +6,7 @@ const router = Router();
 
 // Routes for superuser
 router.route("/all").get(verifyJWT, verifySuperuser, getAllUsers);
+
 router.route("/bulk-upload").post(verifyJWT, verifySuperuser, bulkUploadUsers);
 
 // Routes for all authenticated users

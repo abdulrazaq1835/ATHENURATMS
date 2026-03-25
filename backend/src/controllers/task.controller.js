@@ -37,7 +37,7 @@ const createNewTask = asyncHandler(async(req,res)=>{
 
 
 const getAllTask = asyncHandler(async(req,res)=>{
-    const { projectId } = req.query;
+    const { projectId } = req.params;
 
     let query = {};
     if (projectId) {

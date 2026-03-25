@@ -6,7 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js'
 // options of login/logout security and http
  const options = {
     httpOnly : true,
-    secure : true
+    secure : true,
  }
 
 
@@ -54,7 +54,8 @@ const registerUser = asyncHandler(async(req,res)=>{
           email,
           password,
           phone,
-          isSuperuser: true
+          isSuperuser: true,
+          role : "ADMIN"
     })
 
   return res.status(200).json(new ApiResponse(200, {}, "Superuser registered successfully"))
@@ -94,11 +95,14 @@ const userLoggedIn = asyncHandler(async(req,res)=>{
 
         const loginUser = await User.findById(user._id).select("-password  -refreshToken");
 
+        console.log({...loginUser._doc});
+
+
       return res
       .status(200)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json(new ApiResponse(200, { ...loginUser._doc, accessToken, refreshToken }, "user logged successfully"))
+      .json(new ApiResponse(200, { loginUser, accessToken, refreshToken }, "user logged successfully"))
 })
 
 
@@ -126,6 +130,86 @@ const userFetch = asyncHandler(async(req,res)=>{
 })
 
 
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+    const { newPassword, oldPassword } = req.body
+
+    if([newPassword,oldPassword].some((field)=> String(field).trim()=== "" || field === undefined)) {
+      throw new ApiError(400, "all fields are required")
+    }
+
+
+    const user = await User.findById(req.user?._id)
+
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+
+    if(!isPasswordCorrect) {
+      throw new ApiError(400, "Credientials faild please enter valid password")
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+        $set : {
+          password : newPassword,
+          defaultPasswordChanged : true
+        }
+    }, { new : true}).select("-password -refreshToken")
+
+
+    return res.status(200).json(new ApiResponse(200, {} , "User password change Successfully"))
+})
+
+
+const updateAvatar = asyncHandler(async(req,res)=>{
+
+
+    const avatar = req.files
+
+    if(!avatar) {
+      throw new ApiError(400, "User avatar required")
+    }
+
+    const user = await User.findById(req.user?._id)
+
+    if(!user) {
+      throw new ApiError(400, "User not found")
+    }
+
+
+
+
+
+
+    return res.status(200).json(new ApiResponse(200, {}, "User Avatar update successfully"))
+})
+
+
+const updateUserProfileFileds = asyncHandler(async(req,res)=>{
+
+  const user = await User.findById(req.user._id)
+
+  if(!user) {
+    throw new ApiError(400 , "User not exist")
+  }
+
+    await User.findByIdAndUpdate(
+      user._id,
+      req.body,
+      {
+        new : true,
+        runValidators : true
+      }
+    )
+
+  return res.status(200).json(new ApiResponse(200, {}, "User profile Update Successfully"))
+})
+
+
+
 export {
-  registerUser, userFetch, userLoggedIn, userLoggedOut
+  registerUser,
+  userFetch,
+  userLoggedIn,
+   userLoggedOut,
+   changeCurrentPassword,
+   updateUserProfileFileds,
+   updateAvatar
 }

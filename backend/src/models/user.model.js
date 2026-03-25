@@ -8,6 +8,10 @@ const userSchema = new Schema(
         type : String,
         required : true
       },
+      avatar : {
+          type : String,
+          default : ""
+      },
       email : {
         type : String,
         required: true,
@@ -40,14 +44,14 @@ const userSchema = new Schema(
       },
       domain: {
         type: String,
-        default: ""
+        default: undefined
       },
       joiningDate: {
         type: Date
       },
       internId: {
         type: String,
-        default: ""
+        default: undefined
       }
   },
   { timestamps : true }

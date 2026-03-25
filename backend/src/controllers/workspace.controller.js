@@ -46,6 +46,8 @@ const getWorkspaces = asyncHandler(async (req, res) => {
 // Any User: Get a single workspace by ID (if they have access)
 const getWorkspaceById = asyncHandler(async (req, res) => {
     const { workspaceId } = req.params;
+    // console.log("workpalceId" , workspaceId);
+
 
     const workspace = await Workspace.findById(workspaceId)
         .populate('createdBy', 'name email')
@@ -69,8 +71,22 @@ const getWorkspaceById = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, workspace, "Workspace fetched successfully"));
 });
 
+
+// const addMemmberonWorkplace = asyncHandler(async(req,res)=>{
+
+//       console.log(req.body);
+
+
+// })
+
+
+
 // Superuser: Add a Manager to a Workspace
 const addWorkspaceManager = asyncHandler(async (req, res) => {
+
+  console.log(req.body);
+
+
     const { workspaceId } = req.params;
     const { userId } = req.body; // Internal User ID from the global pool
 
@@ -84,6 +100,7 @@ const addWorkspaceManager = asyncHandler(async (req, res) => {
     }
 
     const user = await User.findById(userId);
+
     if (!user) {
         throw new ApiError(404, "User not found in the global pool");
     }

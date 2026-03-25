@@ -6,7 +6,7 @@ const router = Router()
 
 router.route("/new-task").post(createNewTask)
 
-router.route("/get/all-task").get(getAllTask)
+router.route("/get/task/:projectId").get(getAllTask)
 
 
 

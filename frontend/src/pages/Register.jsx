@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft, FaPhone, FaKey } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +10,7 @@ const Register = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -30,13 +31,15 @@ const Register = () => {
     setIsSubmitting(true);
     setErrorMsg('');
     try {
-      await api.post('/api/v1/tms/auth/user/register', {
+      // Using auth context register function
+      await register({
         name: formData.fullName,
         email: formData.email,
         phone: formData.phone,
         password: formData.password,
         superSecretKey: formData.superSecretKey,
       });
+
       setIsSuccess(true);
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
@@ -129,8 +132,6 @@ const Register = () => {
               </motion.p>
             )}
           </motion.div>
-
-          {/* Role Toggle Removed (Only Superusers use this form) */}
 
           <form className="space-y-3" onSubmit={handleSubmit}>
             {/* Full Name */}

@@ -4,7 +4,8 @@ import express from 'express';
 const app = express();
 
 app.use(cors({
-  origin : process.env.CORS
+  origin : process.env.CORS,
+  credentials : true
 }))
 
 app.use(
@@ -25,6 +26,7 @@ import taskRouter from './routes/task.route.js'
 import userRouter from './routes/user.route.js'
 import workspaceRouter from './routes/workspace.route.js'
 import inviteRouter from './routes/inviteToken.route.js'
+import teamRouter from './routes/team.route.js'
 
 // ======================================================
 // handle routes
@@ -35,6 +37,7 @@ app.use("/api/v1/tms/task", taskRouter)
 app.use("/api/v1/tms/user", userRouter)
 app.use("/api/v1/tms/workspace", workspaceRouter)
 app.use("/api/v1/tms/invite", inviteRouter)
+app.use("/api/v1/tms/team", teamRouter)
 
 // ======================================================
 // global error handler
@@ -49,5 +52,8 @@ app.use((err, req, res, next) => {
     errors: err.errors || []
   });
 });
+
+// server health
+
 
 export default app;

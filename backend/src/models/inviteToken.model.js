@@ -12,10 +12,6 @@ const inviteTokenSchema = new Schema(
       ref: "Workspace",
       required: true
     },
-    projectId: {
-      type: Schema.Types.ObjectId,
-      ref: "Project"
-    },
     role: {
       type: String,
       enum: ["ADMIN", "MANAGER", "MEMBER", "TEAM_LEAD", "TEAM_MEMBER"],

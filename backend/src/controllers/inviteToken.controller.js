@@ -9,8 +9,10 @@ import asyncHandler from '../utils/asyncHandler.js';
 
 // Manager/Admin generates an invite link for a specific role
 const generateInviteLink = asyncHandler(async (req, res) => {
-    const { workspaceId, projectId, role } = req.body;
-    
+    const { workspaceId, role } = req.body;
+    console.log("req.body  invait link", req.body);
+
+
     // role e.g., "TEAM_MEMBER" or "MANAGER" etc.
     if (!workspaceId || !role) {
         throw new ApiError(400, "Workspace ID and role are required.");
@@ -44,9 +46,9 @@ const generateInviteLink = asyncHandler(async (req, res) => {
 
     // Generate strict token
     const rawToken = crypto.randomBytes(32).toString('hex');
-    
+
     // Hash it for DB storage (optional, but good practice. We'll just store raw for now since it's a one-time link)
-    const token = rawToken; 
+    const token = rawToken;
 
     // Expires in 24 hours
     const expiresAt = new Date();
@@ -55,10 +57,12 @@ const generateInviteLink = asyncHandler(async (req, res) => {
     const inviteRecord = await InviteToken.create({
         token,
         workspaceId,
-        projectId: projectId || null,
         role,
         expiresAt
     });
+
+    console.log(`inviteRecord.token, expiresAt`,token);
+
 
     // We realistically want the frontend URL, but backend doesn't always know it natively.
     // For now we just return the raw token. The frontend constructs the domain.com/invite?token=XYZ
@@ -69,12 +73,18 @@ const generateInviteLink = asyncHandler(async (req, res) => {
 const acceptInvite = asyncHandler(async (req, res) => {
     const { token, email, password } = req.body;
 
+    console.log(`token`,token);
+    console.log(`email`,email);
+    console.log(`password`,password);
+
+
     if (!token || !email || !password) {
         throw new ApiError(400, "Token, email, and password are required.");
     }
 
     // Verify User Credentials
     const user = await User.findOne({ email });
+    
     if (!user) {
         throw new ApiError(404, "Account not found in the global pool. Contact your Admin.");
     }
@@ -95,6 +105,7 @@ const acceptInvite = asyncHandler(async (req, res) => {
     }
 
     const workspace = await Workspace.findById(inviteRecord.workspaceId);
+
     if (!workspace) throw new ApiError(404, "Workspace associated with this invite no longer exists.");
 
     // Inject User into Workspace as "MEMBER" (or whatever was designated, e.g., "MANAGER")

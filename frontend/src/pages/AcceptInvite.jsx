@@ -3,8 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaLock, FaEnvelope, FaLink, FaCheckCircle } from 'react-icons/fa';
 import { FiLoader } from 'react-icons/fi';
-import { api } from '../lib/api';
+import { exceptToken } from '../api/index'
 import { useAuth } from '../context/AuthContext';
+import {requestHandler} from '../utils/index'
 
 const AcceptInvite = () => {
     const [searchParams] = useSearchParams();
@@ -25,30 +26,38 @@ const AcceptInvite = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
         setErrorMsg('');
 
-        try {
-            const res = await api.post('/api/v1/tms/invite/accept', {
-                token,
-                email: formData.email,
-                password: formData.password
-            });
-            
-            const { accessToken, user } = res.data.data;
-            login(accessToken, user);
-            
-            if (user) {
-                localStorage.setItem('user', JSON.stringify(user));
+        await requestHandler(
+            async () => {
+                // Prepare the data for the API call
+                const requestData = {
+                    token,
+                    email: formData.email,
+                    password: formData.password
+                };
+
+                // Call the exceptToken API function
+                return await exceptToken(requestData);
+            },
+            setIsSubmitting, // Loading state setter
+            (data) => {
+                // Success handler
+                const { accessToken, user } = data.data;
+                login(accessToken, user);
+
+                if (user) {
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+
+                setIsSuccess(true);
+                setTimeout(() => navigate('/dashboard'), 2000);
+            },
+            (error) => {
+                // Error handler
+                setErrorMsg(error.message || 'Failed to accept invite. Check credentials or link expiry.');
             }
-            
-            setIsSuccess(true);
-            setTimeout(() => navigate('/dashboard'), 2000);
-        } catch (err) {
-            setErrorMsg(err.response?.data?.message || 'Failed to accept invite. Check credentials or link expiry.');
-        } finally {
-            setIsSubmitting(false);
-        }
+        );
     };
 
     if (isSuccess) {
@@ -67,7 +76,7 @@ const AcceptInvite = () => {
 
     return (
         <div className="min-h-screen flex bg-gray-50 items-center justify-center p-6">
-            <motion.div 
+            <motion.div
                 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                 className="max-w-md w-full bg-white rounded-[2rem] p-10 shadow-2xl shadow-blue-100 border border-blue-50"
             >
@@ -88,7 +97,7 @@ const AcceptInvite = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="relative group">
                         <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-                        <input 
+                        <input
                             type="email" required placeholder="Email Address"
                             value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
                             className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-blue-600 transition-all text-slate-800"
@@ -97,14 +106,14 @@ const AcceptInvite = () => {
 
                     <div className="relative group">
                         <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-                        <input 
+                        <input
                             type="password" required placeholder="Password"
                             value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
                             className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-blue-600 transition-all text-slate-800"
                         />
                     </div>
 
-                    <button 
+                    <button
                         type="submit" disabled={isSubmitting || !token}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 flex items-center justify-center gap-2 transition-all mt-4 disabled:bg-slate-300 disabled:shadow-none"
                     >

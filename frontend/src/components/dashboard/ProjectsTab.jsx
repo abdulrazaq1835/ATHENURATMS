@@ -123,8 +123,8 @@ const CreateProjectModal = ({ onClose, onCreated, showToast }) => {
   const toggleMember = (id) => {
     setForm(p => ({
       ...p,
-      memberIds: p.memberIds.includes(id) 
-        ? p.memberIds.filter(mId => mId !== id) 
+      memberIds: p.memberIds.includes(id)
+        ? p.memberIds.filter(mId => mId !== id)
         : [...p.memberIds, id]
     }));
   };
@@ -146,8 +146,8 @@ const CreateProjectModal = ({ onClose, onCreated, showToast }) => {
     }
   };
 
-  const filteredUsers = globalUsers.filter(u => 
-    u.name.toLowerCase().includes(userSearch.toLowerCase()) || 
+  const filteredUsers = globalUsers.filter(u =>
+    u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
     u.email.toLowerCase().includes(userSearch.toLowerCase())
   );
 
@@ -173,13 +173,13 @@ const CreateProjectModal = ({ onClose, onCreated, showToast }) => {
                <label className="block text-slate-600 text-[11px] font-black uppercase tracking-wider ml-1">Assign Team (Global Pool)</label>
                <div className="relative mb-2">
                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={14} />
-                 <input 
-                    type="text" placeholder="Search interns..." 
+                 <input
+                    type="text" placeholder="Search interns..."
                     value={userSearch} onChange={e => setUserSearch(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-xl pl-9 pr-4 py-2 text-xs outline-none" 
+                    className="w-full bg-slate-50 border border-slate-100 rounded-xl pl-9 pr-4 py-2 text-xs outline-none"
                  />
                </div>
-               
+
                <div className="flex-1 overflow-y-auto border border-slate-100 rounded-xl bg-slate-50/50 p-2 space-y-2 max-h-[300px] custom-scrollbar">
                   {filteredUsers.map(u => (
                     <div key={u._id} className="bg-white p-2.5 rounded-xl border border-slate-100 flex items-center justify-between gap-3 group">
@@ -191,23 +191,23 @@ const CreateProjectModal = ({ onClose, onCreated, showToast }) => {
                           </div>
                        </div>
                        <div className="flex items-center gap-1 shrink-0">
-                          <button 
+                          <button
                             type="button"
                             onClick={() => setForm({...form, teamLeadId: u._id})}
                             className={`p-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
-                              form.teamLeadId === u._id 
-                                ? 'bg-amber-100 text-amber-600 border border-amber-200' 
+                              form.teamLeadId === u._id
+                                ? 'bg-amber-100 text-amber-600 border border-amber-200'
                                 : 'bg-slate-50 text-slate-400 hover:text-amber-500 border border-transparent'
                             }`}
                           >
                             Lead
                           </button>
-                          <button 
+                          <button
                             type="button"
                             onClick={() => toggleMember(u._id)}
                             className={`p-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
                               form.memberIds.includes(u._id)
-                                ? 'bg-blue-100 text-blue-600 border border-blue-200' 
+                                ? 'bg-blue-100 text-blue-600 border border-blue-200'
                                 : 'bg-slate-50 text-slate-400 hover:text-blue-500 border border-transparent'
                             }`}
                           >
@@ -221,7 +221,7 @@ const CreateProjectModal = ({ onClose, onCreated, showToast }) => {
           </div>
 
           {error && <p className="text-red-500 text-[13px] flex items-center gap-2 font-medium bg-red-50 p-3 rounded-xl border border-red-100"><FiAlertCircle size={14} />{error}</p>}
-          
+
           <div className="flex gap-4 pt-4 border-t border-slate-100">
             <button type="button" onClick={onClose} className="flex-1 py-3 rounded-2xl border-2 border-slate-100 text-slate-500 text-sm font-bold hover:bg-slate-50 transition-all">Cancel</button>
             <button type="submit" disabled={loading} className="flex-[2] py-3 rounded-2xl bg-slate-900 hover:bg-black text-white text-sm font-black flex items-center justify-center gap-2 transition-all shadow-xl shadow-slate-200">

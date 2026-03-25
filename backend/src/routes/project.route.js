@@ -7,8 +7,11 @@ const router = Router()
 router.use(verifyJWT)
 
 router.route("/add/project").post(verifyWorkspaceAdmin, createProject)
-router.route("/workspace/:workspaceId").get(verifyWorkspaceMember, getAllProjectsByWorkspace)
+
+router.route("/workspace/:workspaceId").get(verifyJWT, getAllProjectsByWorkspace)
+
 router.route("/update/deadline/:projectId").post(verifyWorkspaceAdmin, updateDeadline)
-router.route("/update/:projectId").patch(verifyWorkspaceAdmin, updateProject)
+
+router.route("/update/:projectId").put(verifyWorkspaceAdmin, updateProject)
 
 export default router;

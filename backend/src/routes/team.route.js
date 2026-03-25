@@ -11,9 +11,9 @@ router.use(verifyJWT)
 
 router.route("/add/team").post(createTeam)
 
-router.route("/fetch/team").get(getTeams)
+router.route("/fetch/team/:workspaceId").get(getTeams)
 
-router.route("/update/:teamId").patch(updateTeam)
+router.route("/update/:teamId").put(updateTeam)
 
 router.route("/add-memeber/team/:teamId").patch(addNewMember)
 

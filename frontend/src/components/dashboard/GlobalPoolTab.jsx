@@ -43,7 +43,7 @@ export const GlobalPoolTab = ({ showToast }) => {
                                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1">Full Name</label>
                                 <div className="relative">
                                     <FiUsers className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
-                                    <input 
+                                    <input
                                         type="text" required placeholder="John Doe"
                                         value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                                         className="w-full bg-slate-50 border-2 border-slate-50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-all"
@@ -55,7 +55,7 @@ export const GlobalPoolTab = ({ showToast }) => {
                                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1">Email Address</label>
                                 <div className="relative">
                                     <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
-                                    <input 
+                                    <input
                                         type="email" required placeholder="john@example.com"
                                         value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
                                         className="w-full bg-slate-50 border-2 border-slate-50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-all"
@@ -67,7 +67,7 @@ export const GlobalPoolTab = ({ showToast }) => {
                                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1">Phone (Optional)</label>
                                 <div className="relative">
                                     <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
-                                    <input 
+                                    <input
                                         type="text" placeholder="+91..."
                                         value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
                                         className="w-full bg-slate-50 border-2 border-slate-50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-all"
@@ -75,7 +75,7 @@ export const GlobalPoolTab = ({ showToast }) => {
                                 </div>
                             </div>
 
-                            <button 
+                            <button
                                 type="submit" disabled={loading}
                                 className="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-200"
                             >
@@ -99,7 +99,7 @@ export const GlobalPoolTab = ({ showToast }) => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="bg-white border-2 border-dashed border-slate-200 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
                          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4 text-2xl">
                             <FiUsers />

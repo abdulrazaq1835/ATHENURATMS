@@ -6,8 +6,9 @@ const socketHandler = (server) => {
 
   io = new Server(server, {
       cors : {
-          origin : '*',
-          methods : ["GET", "POST"]
+          origin : process.env.CORS,
+          methods : ["GET", "POST"],
+          credentials : true
       }
   } )
 
