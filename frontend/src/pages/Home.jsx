@@ -62,10 +62,23 @@ const useCountUp = (target, duration = 2000, startCounting = false) => {
 };
 
 const StatCard = ({ stat, idx, inView }) => {
-  const rawValue = stat.value.replace(/[^0-9.]/g, '');
-  const suffix = stat.value.replace(/[0-9.]/g, '');
+
+  let rawValue = stat.value;
+  let suffix = '';
+
+  if (typeof stat.value === 'string') {
+    if (stat.value.includes('/')) {
+      const parts = stat.value.split('/');
+      rawValue = parts[0];
+      suffix = '/' + parts[1];
+    } else {
+      rawValue = stat.value.replace(/[^0-9.]/g, '');
+      suffix = stat.value.replace(/[0-9.]/g, '');
+    }
+  }
+
   const isNumeric = rawValue !== '';
-  const count = useCountUp(rawValue, 1800, inView);
+  const count = useCountUp(Number(rawValue), 1800, inView);
 
   const colors = [
     { accent: 'from-violet-400 to-indigo-400', iconBg: 'bg-violet-50', iconColor: 'text-violet-500', ring: 'border-violet-200', shimmer: 'bg-violet-100', dot: 'bg-violet-400' },
@@ -357,13 +370,13 @@ const Home = () => {
                       {taglines[currentTagline].text}
                     </motion.div>
                   </AnimatePresence>
-                  <motion.span 
+                  {/* <motion.span 
                     animate={{ opacity: [1, 0, 1] }} 
                     transition={{ repeat: Infinity, duration: 0.8 }} 
                     className="text-indigo-500 text-3xl font-light"
                   >
                     |
-                  </motion.span>
+                  </motion.span> */}
                 </div>
               </div>
 
@@ -417,7 +430,7 @@ const Home = () => {
                 className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl"
               ></motion.div>
               
-              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200 p-6 transform hover:scale-[1.02] transition-all duration-500">
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl  border-slate-200 p-6 transform hover:scale-[1.02] transition-all duration-500">
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
@@ -438,7 +451,7 @@ const Home = () => {
                 <div className="space-y-4">
                   <motion.div 
                     whileHover={{ y: -3 }}
-                    className="bg-gradient-to-r from-slate-50 to-indigo-50 rounded-xl p-4 border border-slate-200 hover:shadow-md transition-all duration-300"
+                    className="bg-gradient-to-r from-slate-50 to-indigo-50 rounded-xl p-4 border border-slate-100 hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Active Projects</span>
@@ -734,10 +747,10 @@ const Home = () => {
 
           {/* Stat cards grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, idx) => (
-              <StatCard key={idx} stat={stat} idx={idx} inView={statsInView} />
-            ))}
-          </div>
+  {stats.map((stat, idx) => (
+    <StatCard key={idx} stat={stat} idx={idx} inView={statsInView} />
+  ))}
+</div>
 
           {/* Bottom trust strip */}
           <motion.div
