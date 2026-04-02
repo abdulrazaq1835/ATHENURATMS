@@ -9,7 +9,6 @@ import {
   HiOutlineSparkles,
   HiOutlineArrowNarrowRight,
   HiCheck,
-  HiOutlineShieldCheck,
   HiOutlineClock,
   HiOutlineTrendingUp,
   HiOutlineCog,
@@ -129,7 +128,7 @@ const StatCard = ({ stat, idx, inView }) => {
       </motion.div>
 
       {/* Animated value */}
-      <div className="text-4xl font-bold text-slate-800 mb-1 tracking-tight tabular-nums">
+      <div className="text-3xl md:text-4xl font-bold text-slate-800 mb-1 tracking-tight tabular-nums">
         {isNumeric ? `${count}${suffix}` : stat.value}
       </div>
 
@@ -334,12 +333,12 @@ const Home = () => {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
+            <div className="text-center lg:text-left">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-slate-800 to-slate-700 text-white rounded-full px-4 py-2 mb-6 shadow-lg leading-none"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-slate-800 to-slate-700 text-white rounded-full px-4 py-2 mb-6 shadow-lg leading-none mx-auto lg:mx-0"
               >
                 <HiOutlineSparkles className="w-4 h-4 text-amber-400" />
                 <span className="text-sm font-medium tracking-wide">TASK MANAGEMENT SYSTEM</span>
@@ -349,14 +348,14 @@ const Home = () => {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-5xl lg:text-6xl font-bold mb-4"
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
               >
                 <span className="bg-gradient-to-r from-slate-800 via-slate-700 to-indigo-600 bg-clip-text text-transparent">
                   TMS
                 </span>
               </motion.h1>
 
-              <div className="h-20 mb-6">
+              <div className="h-20 mb-6 flex justify-center lg:justify-start">
                 <div className="flex items-center gap-2">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -365,7 +364,7 @@ const Home = () => {
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -20, opacity: 0 }}
                       transition={{ duration: 0.4 }}
-                      className="text-2xl lg:text-3xl font-semibold text-slate-600 flex items-center gap-3"
+                      className="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-600 flex items-center gap-3"
                     >
                       {taglines[currentTagline].text}
                     </motion.div>
@@ -384,7 +383,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg"
+                className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0"
               >
                 Role-based project management system for modern organizations.
                 Streamline projects, empower teams, and track daily work with
@@ -395,7 +394,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap justify-center lg:justify-start gap-4"
               >
                 <Link
                   to="/register"
@@ -531,7 +530,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl font-bold text-slate-800 mb-4"
+              className="text-2xl sm:text-3xl font-bold text-slate-800 mb-4"
             >
               Clear Role-Based Hierarchy
             </motion.h2>
@@ -540,13 +539,13 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-slate-600 max-w-2xl mx-auto"
+              className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto"
             >
               Streamlined management flow from strategic oversight to operational execution
             </motion.p>
           </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
+         <div className="flex flex-nowrap justify-start md:justify-center items-center gap-4 overflow-x-auto pb-8 pt-4 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible snap-x">
             {hierarchy.map((role, idx) => (
               <React.Fragment key={role.name}>
                 <motion.div 
@@ -555,9 +554,9 @@ const Home = () => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.15, type: "spring" }}
                   whileHover={{ y: -5, scale: 1.05 }}
-                  className="group relative"
+                  className="group relative flex-shrink-0 snap-center"
                 >
-                  <div className={`bg-gradient-to-br ${role.color} rounded-2xl shadow-lg px-6 py-4 min-w-[140px] text-center transition-all duration-300 cursor-pointer`}>
+                  <div className={`bg-gradient-to-br ${role.color} rounded-2xl shadow-lg px-6 py-4 min-w-[130px] text-center transition-all duration-300 cursor-pointer`}>
                     <motion.div whileHover={{ rotate: 10, scale: 1.2 }} className="text-3xl mb-2 flex justify-center">
                       {role.icon}
                     </motion.div>
@@ -571,19 +570,19 @@ const Home = () => {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.15 + 0.1 }}
-                    className="hidden md:flex items-center"
+                    className="flex items-center flex-shrink-0"
                   >
-                    <div className="w-12 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
+                    <div className="w-8 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
                     <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
                       <HiOutlineArrowNarrowRight className="w-5 h-5 text-slate-400" />
                     </motion.div>
-                    <div className="w-12 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
+                    <div className="w-8 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
                   </motion.div>
                 )}
               </React.Fragment>
             ))}
           </div>
-
+ 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -618,7 +617,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl lg:text-4xl font-bold mb-4 text-slate-800"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-slate-800"
             >
               Everything You Need to Succeed
             </motion.h2>
@@ -628,7 +627,7 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="max-w-2xl mx-auto text-lg text-slate-600"
+              className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600"
             >
               Comprehensive tools for project management, team coordination, and performance tracking
             </motion.p>
@@ -730,7 +729,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="text-3xl lg:text-4xl font-bold text-slate-800 mb-3"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 mb-3"
             >
               Numbers that speak for themselves
             </motion.h2>
@@ -739,14 +738,14 @@ const Home = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-slate-500 text-base max-w-xl mx-auto"
+              className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto"
             >
               Real impact across organizations, teams, and daily operations
             </motion.p>
           </div>
 
           {/* Stat cards grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
   {stats.map((stat, idx) => (
     <StatCard key={idx} stat={stat} idx={idx} inView={statsInView} />
   ))}
@@ -790,12 +789,12 @@ const Home = () => {
                 backgroundSize: '40px 40px'
               }}
             />
-            <div className="relative z-10 p-12 md:p-16 text-center text-white">
+            <div className="relative z-10 p-8 sm:p-12 md:p-16 text-center text-white">
               <motion.h2 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-3xl md:text-5xl font-bold mb-6"
+                className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6"
               >
                 Ready to Transform Your Workflow?
               </motion.h2>
